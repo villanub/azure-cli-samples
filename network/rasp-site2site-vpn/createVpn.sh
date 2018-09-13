@@ -35,11 +35,21 @@ storageAccountName="${storageAccountName:1:23}"
 storageAccountType="Standard_LRS"
 
 #Parameters to deploy the Azure site to site ARM template
-params="{\"vpnType\":{\"value\":\"$vpnType\"},\"localGatewayName\":{\"value\":\"$localGatewayName\"},\"adminUsername\":{\"value\":\"$adminUserName\"},\"localGatewayIpAddress\":{\"value\":\"$localGatewayIpAddress\"},\"localAddressPrefix\":{\"value\":\"$localAddressPrefix\"},\"azureVNetAddressPrefix\":{\"value\":\"$azureVNetAddressPrefix\"},\"subnetPrefix\":{\"value\":\"$subnetPrefix\"},\"gatewaySubnetPrefix\":{\"value\":\"$gatewaySubnetPrefix\"},\"newStorageAccountName\":{\"value\":\"$storageAccountName\"},\"sharedKey\":{\"value\":\"$sharedKey\"}}"
-
+#params="{\"vpnType\":{\"value\":\"$vpnType\"},\"localGatewayName\":{\"value\":\"$localGatewayName\"},\"adminUsername\":{\"value\":\"$adminUserName\"},\"localGatewayIpAddress\":{\"value\":\"$localGatewayIpAddress\"},\"localAddressPrefix\":{\"value\":\"$localAddressPrefix\"},\"azureVNetAddressPrefix\":{\"value\":\"$azureVNetAddressPrefix\"},\"subnetPrefix\":{\"value\":\"$subnetPrefix\"},\"gatewaySubnetPrefix\":{\"value\":\"$gatewaySubnetPrefix\"},\"newStorageAccountName\":{\"value\":\"$storageAccountName\"},\"sharedKey\":{\"value\":\"$sharedKey\"}}"
+params="{\"vpnType\":{\"value\":\"$vpnType\"},\"localGatewayName\":{\"value\":\"$localGatewayName\"},\"adminUsername\":{\"value\":\"$adminUserName\"},\"localGatewayIpAddress\":{\"value\":\"$localGatewayIpAddress\"},\"localAddressPrefix\":{\"value\":\"$localAddressPrefix\"},\"azureVNetAddressPrefix\":{\"value\":\"$azureVNetAddressPrefix\"},\"subnetPrefix\":{\"value\":\"$subnetPrefix\"},\"gatewaySubnetPrefix\":{\"value\":\"$gatewaySubnetPrefix\"},\"sharedKey\":{\"value\":\"$sharedKey\"}}"
 echo "Please follow the instructions to login"
 echo "If the script is run over a SSH connection, you can open the browser locally"
 $azp/az login
+
+#Select Azure Subscription to deploy VPN
+$azp/az account list --output table
+
+echo -n "Please type the SubscriptionID to use:"
+read subID
+
+echo $subID
+
+$azp/az account set --subscription $subID
 
 $azp/az group create --name "$resGroup" --location "$location"
 res=$?
